@@ -1,20 +1,31 @@
-local quickterm = {}
+local themes = require("themes")
 
-quickterm.state = {
+local M = {}
+
+M.state = {
   quick = {
     buf = -1,
     win = -1,
   },
 }
 
-function quickterm.setup(opts) end
+local default = themes.floating()
+local options = {}
 
-function quickterm.create_quick_win(opts)
+function M.setup(opts)
+  options = vim.tbl_deep_extend("force", default, opts or {})
+  for k, v in pairs(options) do
+    print(k .. v)
+  end
+end
+
+--- TODO: Add redraw functionality so terminal dynamically resizes
+local function create_quick_win(opts)
   opts = opts or {}
-  local width = vim.o.columns
-  local height = 10
-  local col = vim.o.columns - 1
-  local row = vim.o.lines - 1
+  -- local width = vim.o.columns
+  -- local height = 10
+  -- local col = vim.o.columns - 1
+  -- local row = vim.o.lines - 1
 
   local buf = nil
   if vim.api.nvim_buf_is_valid(opts.buf) then
@@ -23,32 +34,24 @@ function quickterm.create_quick_win(opts)
     buf = vim.api.nvim_create_buf(false, true)
   end
 
-  local win_config = {
-    relative = "editor",
-    width = width,
-    height = height,
-    col = col,
-    row = row,
-    border = "rounded",
-  }
-
-  local win = vim.api.nvim_open_win(buf, true, win_config)
+  local win = vim.api.nvim_open_win(buf, true, options)
 
   return { buf = buf, win = win }
 end
 
-function quickterm.toggle_terminal()
-  if not vim.api.nvim_win_is_valid(quickterm.state.quick.win) then
-    quickterm.state.quick = quickterm.create_quick_win({ buf = quickterm.state.quick.buf })
-    if vim.bo[quickterm.state.quick.buf].buftype ~= "terminal" then
+function M.toggle_terminal()
+  if not vim.api.nvim_win_is_valid(M.state.quick.win) then
+    M.state.quick = create_quick_win({ buf = M.state.quick.buf })
+    if vim.bo[M.state.quick.buf].buftype ~= "terminal" then
       vim.cmd.terminal()
     end
+    vim.api.nvim_win_set_cursor(M.state.quick.win, { vim.api.nvim_buf_line_count(M.state.quick.buf), 0 })
   else
-    vim.api.nvim_win_hide(quickterm.state.quick.win)
+    vim.api.nvim_win_hide(M.state.quick.win)
   end
 end
 
-vim.api.nvim_create_user_command("Quickterm", quickterm.toggle_terminal, {})
-vim.keymap.set("n", "<leader>st", quickterm.toggle_terminal)
+vim.api.nvim_create_user_command("Quickterm", M.toggle_terminal, {})
+vim.keymap.set("n", "<leader>st", M.toggle_terminal, { desc = "[S]how [T]erminal" })
 
-return quickterm
+return M
