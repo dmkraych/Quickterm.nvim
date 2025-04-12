@@ -13,7 +13,21 @@ local default = themes.floating()
 local options = {}
 
 function M.setup(opts)
-  options = vim.tbl_deep_extend("force", default, opts or {})
+  local theme = {}
+  if opts.theme then
+    if opts.theme == "floating" then
+      theme = themes.floating()
+    elseif opts.theme == "bottom" then
+      theme = themes.bottom()
+    elseif opts.theme == "top" then
+      theme = themes.top()
+    end
+  else
+    theme = default
+  end
+
+  options = vim.tbl_deep_extend("force", theme, opts or {})
+  options.theme = nil
   for k, v in pairs(options) do
     print(k .. v)
   end
@@ -22,10 +36,6 @@ end
 --- TODO: Add redraw functionality so terminal dynamically resizes
 local function create_quick_win(opts)
   opts = opts or {}
-  -- local width = vim.o.columns
-  -- local height = 10
-  -- local col = vim.o.columns - 1
-  -- local row = vim.o.lines - 1
 
   local buf = nil
   if vim.api.nvim_buf_is_valid(opts.buf) then
