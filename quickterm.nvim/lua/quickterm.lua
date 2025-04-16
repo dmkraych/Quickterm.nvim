@@ -25,9 +25,18 @@ local function configure_theme(choice)
   return theme
 end
 
+local function user_keymap(choice)
+  if choice == false then
+    return
+  elseif type(choice) == "string" then
+    vim.keymap.set("n", choice, M.toggle_terminal)
+  else
+    vim.keymap.set("n", "<leader>st", M.toggle_terminal, { desc = "[S]how [T]erminal" })
+  end
+end
+
 function M.setup(config, opts)
   local theme = {}
-  local map_choice = nil
 
   if config.theme then
     theme = configure_theme(config.theme)
@@ -36,14 +45,11 @@ function M.setup(config, opts)
   end
 
   options = vim.tbl_deep_extend("force", theme, opts or {})
-
-  if config.mapping == false then
-    map_choice = false
+  -- TODO: Error handling for bad strings (overloaded, typos, etc.)
+  if pcall(user_keymap, config.mapping) then
+    print("User-specified keymap initiated.")
   else
-    map_choice = true
-  end
-  if map_choice then
-    vim.keymap.set("n", "<leader>st", M.toggle_terminal, { desc = "[S]how [T]erminal" })
+    print("No keymap specified by user.")
   end
 end
 
