@@ -27,29 +27,26 @@ end
 
 function M.setup(config, opts)
   local theme = {}
-  local map_choice = config.mapping or true
+  local map_choice = nil
 
   if config.theme then
     theme = configure_theme(config.theme)
   else
     theme = default
   end
-  for k, v in pairs(theme) do
-    print(k .. v)
-  end
 
   options = vim.tbl_deep_extend("force", theme, opts or {})
 
-  for k, v in pairs(options) do
-    print(k .. v)
+  if config.mapping == false then
+    map_choice = false
+  else
+    map_choice = true
   end
-
   if map_choice then
     vim.keymap.set("n", "<leader>st", M.toggle_terminal, { desc = "[S]how [T]erminal" })
   end
 end
 
---- TODO: Add redraw functionality so terminal dynamically resizes
 local function create_quick_win(opts)
   opts = opts or {}
 
