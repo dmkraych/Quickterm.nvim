@@ -10,8 +10,9 @@ function themes.floating(opts)
     col = math.floor((vim.o.columns * 0.4) / 2),
     row = math.floor((vim.o.lines * 0.4) / 2),
     border = opts.border or "double",
+    -- mapping = opts.mapping or true,
   }
-  return vim.tbl_deep_extend("force", theme_opts, opts)
+  return theme_opts
 end
 
 function themes.bottom(opts)
@@ -24,6 +25,7 @@ function themes.bottom(opts)
     col = vim.o.columns - 1,
     row = vim.o.lines - 1,
     border = opts.border or "double",
+    -- mapping = opts.mapping or true,
   }
   return vim.tbl_deep_extend("force", theme_opts, opts)
 end
@@ -35,9 +37,10 @@ function themes.top(opts)
     -- theme = "top",
     width = vim.o.columns,
     height = opts.height or 10,
-    col = vim.o.columns - 1,
-    row = vim.o.lines - 1,
+    col = 1,
+    row = 1,
     border = opts.border or "double",
+    -- mapping = opts.mapping or true,
   }
   return vim.tbl_deep_extend("force", theme_opts, opts)
 end

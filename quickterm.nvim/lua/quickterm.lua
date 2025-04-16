@@ -12,24 +12,40 @@ M.state = {
 local default = themes.floating()
 local options = {}
 
-function M.setup(opts)
+local function configure_theme(choice)
   local theme = {}
-  if opts.theme then
-    if opts.theme == "floating" then
-      theme = themes.floating()
-    elseif opts.theme == "bottom" then
-      theme = themes.bottom()
-    elseif opts.theme == "top" then
-      theme = themes.top()
-    end
+  if choice == "floating" then
+    theme = themes.floating()
+  elseif choice == "bottom" then
+    theme = themes.bottom()
+  elseif choice == "top" then
+    theme = themes.top()
+  end
+
+  return theme
+end
+
+function M.setup(config, opts)
+  local theme = {}
+  local map_choice = config.mapping or true
+
+  if config.theme then
+    theme = configure_theme(config.theme)
   else
     theme = default
   end
+  for k, v in pairs(theme) do
+    print(k .. v)
+  end
 
   options = vim.tbl_deep_extend("force", theme, opts or {})
-  options.theme = nil
+
   for k, v in pairs(options) do
     print(k .. v)
+  end
+
+  if map_choice then
+    vim.keymap.set("n", "<leader>st", M.toggle_terminal, { desc = "[S]how [T]erminal" })
   end
 end
 
@@ -61,7 +77,19 @@ function M.toggle_terminal()
   end
 end
 
+vim.api.nvim_create_autocmd("VimResized", {
+  group = vim.api.nvim_create_augroup("term-resized", {}),
+  callback = function()
+    if not vim.api.nvim_win_is_valid(M.state.quick.win) then
+      return
+    end
+
+    local updated = configure_theme(options)
+    vim.api.nvim_win_set_config(M.state.quick.win, updated)
+  end,
+})
+
 vim.api.nvim_create_user_command("Quickterm", M.toggle_terminal, {})
-vim.keymap.set("n", "<leader>st", M.toggle_terminal, { desc = "[S]how [T]erminal" })
+-- vim.keymap.set("n", "<leader>st", M.toggle_terminal, { desc = "[S]how [T]erminal" })
 
 return M
