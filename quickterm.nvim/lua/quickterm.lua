@@ -26,17 +26,22 @@ local function configure_theme(choice)
 end
 
 local function user_keymap(choice)
+  assert((type(choice) == "string" or type(choice) == "boolean"), "User-defined keymap must be a string or boolean.")
   if choice == false then
     return
-  elseif type(choice) == "string" then
+  elseif vim.fn.maparg(choice) ~= "" then
+    print(
+      string.format("User-specified map (%s) already set to %s, no keymap assigned.", choice, vim.fn.maparg(choice))
+    )
     vim.keymap.set("n", choice, M.toggle_terminal)
   else
-    vim.keymap.set("n", "<leader>st", M.toggle_terminal, { desc = "[S]how [T]erminal" })
+    vim.keymap.set("n", choice, M.toggle_terminal)
   end
 end
 
 function M.setup(config, opts)
   local theme = {}
+  --TODO: Make 'theme' part of 'opts' and move window config to 'config'
 
   if config.theme then
     theme = configure_theme(config.theme)
@@ -45,11 +50,15 @@ function M.setup(config, opts)
   end
 
   options = vim.tbl_deep_extend("force", theme, opts or {})
-  -- TODO: Error handling for bad strings (overloaded, typos, etc.)
-  if pcall(user_keymap, config.mapping) then
-    print("User-specified keymap initiated.")
+
+  if config.mapping then
+    user_keymap(config.mapping)
+  elseif vim.fn.maparg("<leader>st", "n") ~= "" then
+    print(
+      string.format("Default keymap (<leader>st) already mapped to %s, no keymap set.", vim.fn.maparg("<leader>st"))
+    )
   else
-    print("No keymap specified by user.")
+    vim.keymap.set("n", "<leader>st", M.toggle_terminal, { desc = "[S]how [T]erminal" })
   end
 end
 
