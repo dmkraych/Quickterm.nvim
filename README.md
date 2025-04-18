@@ -21,7 +21,7 @@ Currently only tested with [lazy.nvim](https://github.com/folke/lazy.nvim), with
 
 ```lua
 {
-    'derikkraych/Quickterm.nvim',
+    'dmkraych/Quickterm.nvim',
     opts = {},
     config{},
 }
@@ -29,22 +29,22 @@ Currently only tested with [lazy.nvim](https://github.com/folke/lazy.nvim), with
 
 ## Options
 
-The following listed options are the <i>defaults</i>; you can adjust any of them to your choosing, or leave the `config{}` and `opts{}` tables empty to retain the defaults.
+The following listed options are the <i>defaults</i>; you can adjust any of them to your choosing, or leave the `win_config{}` and `opts{}` tables empty to retain the defaults.
 
 ```lua
 {
     'derikkraych/Quickterm.nvim',
     opts = {
+        theme = "floating", -- other themes are 'top' and 'bottom'
+        mapping = "<leader>st", -- won't overload keymaps, including the default
+    },
+    win_config{ --- overrides theme values
         relative = "editor",
         width = math.floor(vim.o.columns * 0.6),
         height = math.floor(vim.o.lines * 0.6),
         col = math.floor((vim.o.columns * 0.4) / 2),
         row = math.floor((vim.o.lines * 0.4) / 2),
         border = "double",
-    },
-    config{
-        theme = "floating", -- other themes are 'top' and 'bottom'
-        mapping = "<leader>st", -- won't overload keymaps, including the default
     },
 }
 ```
@@ -56,5 +56,10 @@ Please keep in mind this plugin is in its very earliest stages; I anticipate sev
 1. Ensure support for other major plugin managers
 2. Manage overloading of keymaps
 3. Better dynamic resizing
+4. Add mouse support for resizing and moving floating windows.
 
 Beyond that, if I get any requests that are within my capacity, I'll endeavor to add them!
+
+## Acknowledgements
+
+If it's not clear, this is largely based on the floaterminal by Neovim legend [tjdevries](https://github.com/tjdevries), from his Advent of Neovim 2024 series.

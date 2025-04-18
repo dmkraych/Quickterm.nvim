@@ -39,20 +39,19 @@ local function user_keymap(choice)
   end
 end
 
-function M.setup(config, opts)
+function M.setup(opts, win_config)
   local theme = {}
-  --TODO: Make 'theme' part of 'opts' and move window config to 'config'
 
-  if config.theme then
-    theme = configure_theme(config.theme)
+  if opts.theme then
+    theme = configure_theme(opts.theme)
   else
     theme = default
   end
 
-  options = vim.tbl_deep_extend("force", theme, opts or {})
+  options = vim.tbl_deep_extend("force", theme, win_config or {})
 
-  if config.mapping then
-    user_keymap(config.mapping)
+  if opts.mapping then
+    user_keymap(opts.mapping)
   elseif vim.fn.maparg("<leader>st", "n") ~= "" then
     print(
       string.format("Default keymap (<leader>st) already mapped to %s, no keymap set.", vim.fn.maparg("<leader>st"))
