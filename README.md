@@ -29,23 +29,23 @@ Currently only tested with [lazy.nvim](https://github.com/folke/lazy.nvim), with
 
 ## Options
 
-The following listed options are the <i>defaults</i>; you can adjust any of them to your choosing, or leave the `win_config{}` and `opts{}` tables empty to retain the defaults.
+The following listed options are the <i>defaults</i>; you can adjust any of them to your choosing, or leave the `opts{}` table empty to retain the defaults.
 
 ```lua
 {
-    'derikkraych/Quickterm.nvim',
     opts = {
         theme = "floating", -- other themes are 'top' and 'bottom'
         mapping = "<leader>st", -- won't overload keymaps, including the default
-    },
-    win_config{ --- overrides theme values
-        relative = "editor",
-        width = math.floor(vim.o.columns * 0.6),
-        height = math.floor(vim.o.lines * 0.6),
-        col = math.floor((vim.o.columns * 0.4) / 2),
-        row = math.floor((vim.o.lines * 0.4) / 2),
-        border = "double",
-    },
+
+        win_config{ --- overrides theme values
+            relative = "editor",
+            width = math.floor(vim.o.columns * 0.6),
+            height = math.floor(vim.o.lines * 0.6),
+            col = math.floor((vim.o.columns * 0.4) / 2),
+            row = math.floor((vim.o.lines * 0.4) / 2),
+            border = "double",
+        },
+    }
 }
 ```
 

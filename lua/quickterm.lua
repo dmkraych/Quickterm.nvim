@@ -39,7 +39,7 @@ local function user_keymap(choice)
   end
 end
 
-function M.setup(opts, win_config)
+function M.setup(opts)
   local theme = {}
 
   if opts.theme then
@@ -48,7 +48,7 @@ function M.setup(opts, win_config)
     theme = default
   end
 
-  options = vim.tbl_deep_extend("force", theme, win_config or {})
+  options = vim.tbl_deep_extend("force", theme, opts.win_config or {})
 
   if opts.mapping then
     user_keymap(opts.mapping)
