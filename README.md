@@ -4,10 +4,10 @@ Quickly create a terminal that saves state when hidden.
 
 <!-- TOC -->
 
-[Requirements](#requirements)
-[Installation](#installation)
-[Options](#options)
-[Roadmap](#roadmap)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Options](#options)
+- [Roadmap](#roadmap)
 
 <!-- TOC -->
 
@@ -29,13 +29,15 @@ Currently only tested with [lazy.nvim](https://github.com/folke/lazy.nvim), with
 
 ## Options
 
-The following listed options are the <i>defaults</i>; you can adjust any of them to your choosing, or leave the `opts{}` table empty to retain the defaults.
+The following listed options are the _defaults_; you can adjust any of them to your choosing, or leave the `opts{}` table empty to retain the defaults. Note that the default behavior is not to override keymaps.
 
 ```lua
 {
     opts = {
         theme = "floating", -- other themes are 'top' and 'bottom'
-        mapping = "<leader>st", -- won't overload keymaps, including the default
+        mapping = { keymap = "<leader>st",
+                    remap = false -- set remap = true to override keymaps
+        }
 
         win_config{ --- overrides theme values
             relative = "editor",
@@ -54,9 +56,8 @@ The following listed options are the <i>defaults</i>; you can adjust any of them
 Please keep in mind this plugin is in its very earliest stages; I anticipate several breaking changes. That being said, my current priorities are:
 
 1. Ensure support for other major plugin managers
-2. Manage overloading of keymaps
-3. Better dynamic resizing
-4. Add mouse support for resizing and moving floating windows.
+2. Better dynamic resizing
+3. Add mouse support for resizing and moving floating windows.
 
 Beyond that, if I get any requests that are within my capacity, I'll endeavor to add them!
 

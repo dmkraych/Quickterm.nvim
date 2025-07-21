@@ -25,17 +25,36 @@ local function configure_theme(choice)
   return theme
 end
 
-local function user_keymap(choice)
-  assert((type(choice) == "string" or type(choice) == "boolean"), "User-defined keymap must be a string or boolean.")
-  if choice == false then
-    return
-  elseif vim.fn.maparg(choice) ~= "" then
-    print(
-      string.format("User-specified map (%s) already set to %s, no keymap assigned.", choice, vim.fn.maparg(choice))
+local function default_keymap(choice)
+  choice = choice or nil
+  if vim.fn.maparg("<leader>st") ~= "" and choice.remap ~= true then
+    local msg = string.format(
+      "Default keymap (<leader>st) already mapped to %s, no keymap set. To override this behavior, set opts.mapping.remap = true.",
+      vim.fn.maparg("<leader>st")
     )
-    vim.keymap.set("n", choice, M.toggle_terminal)
+    vim.notify(msg)
   else
-    vim.keymap.set("n", choice, M.toggle_terminal)
+    vim.keymap.set("n", "<leader>st", M.toggle_terminal, { desc = "[S]how [T]erminal" })
+  end
+end
+
+local function user_keymap(choice)
+  local keymap = choice.keymap or nil
+  local remap = choice.remap or false
+  assert((type(keymap) == "string" or keymap == nil), "User-defined keymap must be a string.")
+  if not keymap then
+    default_keymap(choice)
+  end
+  if keymap and vim.fn.maparg(keymap) ~= "" and remap ~= true then
+    local msg = string.format(
+      "User-defined keymap (%s) already set to %s, defaulting to (<leader>st). To override this behavior, set opts.mapping.remap = true.",
+      keymap,
+      vim.fn.maparg(keymap)
+    )
+    vim.notify(msg, 1)
+    default_keymap(choice)
+  elseif keymap then
+    vim.keymap.set("n", keymap, M.toggle_terminal)
   end
 end
 
@@ -52,12 +71,8 @@ function M.setup(opts)
 
   if opts.mapping then
     user_keymap(opts.mapping)
-  elseif vim.fn.maparg("<leader>st", "n") ~= "" then
-    print(
-      string.format("Default keymap (<leader>st) already mapped to %s, no keymap set.", vim.fn.maparg("<leader>st"))
-    )
   else
-    vim.keymap.set("n", "<leader>st", M.toggle_terminal, { desc = "[S]how [T]erminal" })
+    default_keymap()
   end
 end
 
