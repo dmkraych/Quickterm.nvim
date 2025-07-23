@@ -3,7 +3,7 @@ local themes = require("themes")
 local M = {}
 
 M.state = {
-  quick = {
+  swift = {
     buf = -1,
     win = -1,
   },
@@ -76,7 +76,7 @@ function M.setup(opts)
   end
 end
 
-local function create_quick_win(opts)
+local function create_swift_win(opts)
   opts = opts or {}
 
   local buf = nil
@@ -92,30 +92,30 @@ local function create_quick_win(opts)
 end
 
 function M.toggle_terminal()
-  if not vim.api.nvim_win_is_valid(M.state.quick.win) then
-    M.state.quick = create_quick_win({ buf = M.state.quick.buf })
-    if vim.bo[M.state.quick.buf].buftype ~= "terminal" then
+  if not vim.api.nvim_win_is_valid(M.state.swift.win) then
+    M.state.swift = create_swift_win({ buf = M.state.swift.buf })
+    if vim.bo[M.state.swift.buf].buftype ~= "terminal" then
       vim.cmd.terminal()
     end
-    vim.api.nvim_win_set_cursor(M.state.quick.win, { vim.api.nvim_buf_line_count(M.state.quick.buf), 0 })
+    vim.api.nvim_win_set_cursor(M.state.swift.win, { vim.api.nvim_buf_line_count(M.state.swift.buf), 0 })
   else
-    vim.api.nvim_win_hide(M.state.quick.win)
+    vim.api.nvim_win_hide(M.state.swift.win)
   end
 end
 
 vim.api.nvim_create_autocmd("VimResized", {
   group = vim.api.nvim_create_augroup("term-resized", {}),
   callback = function()
-    if not vim.api.nvim_win_is_valid(M.state.quick.win) then
+    if not vim.api.nvim_win_is_valid(M.state.swift.win) then
       return
     end
 
     local updated = configure_theme(options)
-    vim.api.nvim_win_set_config(M.state.quick.win, updated)
+    vim.api.nvim_win_set_config(M.state.swift.win, updated)
   end,
 })
 
-vim.api.nvim_create_user_command("Quickterm", M.toggle_terminal, {})
+vim.api.nvim_create_user_command("Swifterm", M.toggle_terminal, {})
 -- vim.keymap.set("n", "<leader>st", M.toggle_terminal, { desc = "[S]how [T]erminal" })
 
 return M

@@ -1,6 +1,6 @@
-# "Quickterm.nvim"
+# "Swifterm.nvim"
 
-Quickly create a terminal that saves state when hidden.
+Create a popup terminal that saves state when hidden.
 
 <!-- TOC -->
 
@@ -21,7 +21,7 @@ Currently only tested with [lazy.nvim](https://github.com/folke/lazy.nvim), with
 
 ```lua
 {
-    'dmkraych/Quickterm.nvim',
+    'dmkraych/Swifterm.nvim',
     opts = {},
     config{},
 }
