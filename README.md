@@ -56,6 +56,7 @@ require("swifterm").setup({})
 ```
 
 </details>
+
 ## Options
 
 The following listed options are the _defaults_; you can adjust any of them to your choosing, or leave the `opts{}` table empty to retain the defaults. Note that the default behavior is not to override keymaps.
