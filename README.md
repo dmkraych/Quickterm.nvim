@@ -17,16 +17,45 @@ Tested on neovim 0.11.0-2, though the implementation is basic enough that it sho
 
 ## Installation
 
-Currently only tested with [lazy.nvim](https://github.com/folke/lazy.nvim), with additional plugin manager support planned.
+<details>
+    <summary>lazy.nvim</summary>
 
 ```lua
 {
     'dmkraych/Swifterm.nvim',
     opts = {},
-    config{},
 }
 ```
 
+</details>
+
+<details>
+    <summary>vim-plug</summary>
+
+```lua
+    vim.call('plug#begin')
+    ...
+    Plug 'dmkraych/Swifterm.nvim'
+    ...
+    vim.call('plug#end')
+```
+
+</details>
+<details>
+    <summary>pckr.nvim</summary>
+
+```lua
+
+require("pckr").add({
+  "dmkraych/Swifterm.nvim",
+})
+
+...
+
+require("swifterm").setup({})
+```
+
+</details>
 ## Options
 
 The following listed options are the _defaults_; you can adjust any of them to your choosing, or leave the `opts{}` table empty to retain the defaults. Note that the default behavior is not to override keymaps.
@@ -35,11 +64,11 @@ The following listed options are the _defaults_; you can adjust any of them to y
 {
     opts = {
         theme = "floating", -- other themes are 'top' and 'bottom'
-        mapping = { keymap = "<leader>st",
+        mapping = { keymap = "<leader>st", --you can set any keymap you'd like here
                     remap = false -- set remap = true to override keymaps
         }
 
-        win_config{ --- overrides theme values
+        win_config = { --- overrides theme values
             relative = "editor",
             width = math.floor(vim.o.columns * 0.6),
             height = math.floor(vim.o.lines * 0.6),
@@ -55,11 +84,10 @@ The following listed options are the _defaults_; you can adjust any of them to y
 
 Please keep in mind this plugin is in its very earliest stages; I anticipate several breaking changes. That being said, my current priorities are:
 
-1. Ensure support for other major plugin managers
-2. Better dynamic resizing
-3. Add mouse support for resizing and moving floating windows.
+1. Better dynamic resizing
+2. Add mouse support for resizing and moving floating windows.
 
-Beyond that, if I get any requests that are within my capacity, I'll endeavor to add them!
+Beyond that, feel free to submit a feature request and I'll do what I can!
 
 ## Acknowledgements
 
