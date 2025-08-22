@@ -1,6 +1,7 @@
 local themes = {}
 
 function themes.floating(opts)
+  -- creates the terminal floating and centered in the window; the default theme
   opts = opts or {}
   local theme_opts = {
     relative = "editor",
@@ -14,6 +15,7 @@ function themes.floating(opts)
 end
 
 function themes.bottom(opts)
+  -- creates the terminal across the bottom of the window; spans the width
   opts = opts or {}
   local theme_opts = {
     relative = "editor",
@@ -27,6 +29,7 @@ function themes.bottom(opts)
 end
 
 function themes.top(opts)
+  -- creates the terminal across the top of the window; spans the width
   opts = opts or {}
   local theme_opts = {
     relative = "editor",

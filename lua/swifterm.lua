@@ -13,6 +13,7 @@ local default = themes.floating()
 local options = {}
 
 local function configure_theme(choice)
+  -- set the theme if user-defined
   local theme = {}
   if choice == "floating" then
     theme = themes.floating()
@@ -42,6 +43,7 @@ local function user_keymap(choice)
   local keymap = choice.keymap or nil
   local remap = choice.remap or false
   assert((type(keymap) == "string" or keymap == nil), "User-defined keymap must be a string.")
+  -- if remap set but no keymap, set default keymap with remap choice
   if not keymap then
     default_keymap(choice)
   end
@@ -77,6 +79,7 @@ function M.setup(opts)
 end
 
 local function create_swift_win(opts)
+  -- creates new terminal if M.state.swift.buf is not set; shows terminal if valid
   opts = opts or {}
 
   local buf = nil
@@ -104,6 +107,7 @@ function M.toggle_terminal()
 end
 
 vim.api.nvim_create_autocmd("VimResized", {
+  --BUG: floating window does not resize correctly
   group = vim.api.nvim_create_augroup("term-resized", {}),
   callback = function()
     if not vim.api.nvim_win_is_valid(M.state.swift.win) then
@@ -116,6 +120,5 @@ vim.api.nvim_create_autocmd("VimResized", {
 })
 
 vim.api.nvim_create_user_command("Swifterm", M.toggle_terminal, {})
--- vim.keymap.set("n", "<leader>st", M.toggle_terminal, { desc = "[S]how [T]erminal" })
 
 return M
